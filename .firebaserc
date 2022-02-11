@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "brunos-3d-experience": {
+      "hosting": {
+        "brunos-abstract-site": [
+          "brunos-3d-experience"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "brunos-3d-experience"
+  }
+}

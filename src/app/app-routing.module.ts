@@ -1,10 +1,43 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { DevTestComponent } from './modules/dev-test/dev-test.component';
+import { ParticlesLessonComponent } from './modules/particles-lesson/particles-lesson.component';
+import { RaycastLessonComponent } from './modules/raycast-lesson/raycast-lesson.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: 'dev-test',
+    loadChildren: () =>
+      import('./modules/dev-test/dev-test.module').then((m) => m.DevTestModule),
+    component: DevTestComponent,
+  },
+  {
+    path: 'worksitePrototype',
+    loadChildren: () =>
+      import('./modules/worksite-prototype/worksite-prototype.module').then(
+        (m) => m.WorksitePrototypeModule
+      ),
+  },
+  {
+    path: 'raycast-lesson',
+    component: RaycastLessonComponent,
+    loadChildren: () =>
+      import('./modules/raycast-lesson/raycast-lesson.module').then(
+        (m) => m.RaycastLessonModule
+      ),
+  },
+  {
+    path: 'particles-lesson',
+    component: ParticlesLessonComponent,
+    loadChildren: () =>
+      import('./modules/particles-lesson/particles-lesson.module').then(
+        (m) => m.ParticlesLessonModule
+      ),
+  },
+];
 
 @NgModule({
   imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+  exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

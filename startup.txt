@@ -1,0 +1,65 @@
+lorem20 - 20 words of lorem ipsum!
+
+ngrok http 4200 -host-header="localhost:4200"
+
+STARTUP**********************************************************************************
+
+
+git pull
+
+
+ng s --configuration development
+
+
+firebase emulators:start --import emulatorData
+
+
+cd functions
+tsc -watch
+
+
+EXPORT**********************************************************************************
+
+
+firebase emulators:export emulatorData
+y
+
+DEPLOY*****************
+
+ng build --configuration production
+OR
+npm run dax_build
+OR
+npm run dax_build_dev
+
+
+firebase deploy --only functions
+
+
+FIX EMULATOR PORT TAKEN/**********/************/************/************/************/************/************/************/************FIX EMULATOR PORT TAKEN
+
+netstat -ano | findstr :8080
+taskkill /PID <PID> /F
+
+OR NEW METHOD?
+
+npx kill-port --port 8080
+
+
+/*****************END OF DAY
+
+
+git status
+git add .
+git commit
+git push
+
+
+
+
+
+
+
+
+
+

@@ -1,5 +1,8 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
+  "cli": {
+    "analytics": "071525d8-bf4e-421c-ac91-9d3b0e83325b"
+  },
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
@@ -33,11 +36,13 @@
           },
           "configurations": {
             "production": {
+              "buildOptimizer": true, 
+              "optimization": true,
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "500kb",
-                  "maximumError": "1mb"
+                  "maximumWarning": "10mb",
+                  "maximumError": "100mb"
                 },
                 {
                   "type": "anyComponentStyle",
@@ -97,6 +102,16 @@
               "src/styles.css"
             ],
             "scripts": []
+          }
+        },
+        "deploy": {
+          "builder": "@angular/fire:deploy",
+          "options": {
+            "prerender": false,
+            "ssr": false,
+            "browserTarget": "brunos-abstract-site:build:production",
+            "firebaseProject": "brunos-3d-experience",
+            "firebaseHostingSite": "brunos-3d-experience"
           }
         }
       }

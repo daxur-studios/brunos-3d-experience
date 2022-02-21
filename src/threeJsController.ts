@@ -61,6 +61,11 @@ type cursor = {
   y: number;
 };
 
+type environmentConfig = {
+  WebGLRendererAlpha: boolean;
+  fpsInterval: number;
+};
+
 type resizeConfig = {
   resizeable: boolean;
   evalWidth?: string;
@@ -82,7 +87,7 @@ type cameraConfig = {
  * use measureFPS.FPS to display current FPS
  */
 export class ThreeJsEnvironment {
-  measureFPS = new MeasureFPS(this.fpsInterval);
+  measureFPS = new MeasureFPS(this.environmentConfig.fpsInterval);
 
   scene!: Scene;
   camera!: PerspectiveCamera;
@@ -102,7 +107,8 @@ export class ThreeJsEnvironment {
 
   constructor(
     public sizes: sizes,
-    private fpsInterval: number,
+    private environmentConfig: environmentConfig,
+
     private resizeConfig: resizeConfig,
     private cameraConfig: cameraConfig,
     public canvas: HTMLCanvasElement
@@ -128,6 +134,7 @@ export class ThreeJsEnvironment {
     this.canvas.addEventListener('mousemove', (e) => {
       this.onMouseMove(e);
     });
+
     window.addEventListener('resize', (e) => {
       this.onResize(e);
     });
@@ -148,7 +155,7 @@ export class ThreeJsEnvironment {
 
     // create rendered
     this.renderer = new WebGLRenderer({
-      alpha: true,
+      alpha: this.environmentConfig.WebGLRendererAlpha,
       canvas: this.canvas as any,
     });
 
@@ -259,8 +266,6 @@ export class ThreeJsEnvironment {
   onMouseMove(e: MouseEvent) {
     this.cursor.x = (e.offsetX / this.sizes.width) * 2 - 1;
     this.cursor.y = -((e.offsetY / this.sizes.height) * 2 - 1);
-
-    console.log(this.cursor, e);
   }
 
   onResize(e: UIEvent) {
@@ -292,12 +297,13 @@ export class ThreeJsEnvironment {
 export class BasicThreeJsController extends ThreeJsEnvironment {
   constructor(
     public sizes: sizes,
-    fpsInterval: number,
+    environmentConfig: environmentConfig,
+
     resizeConfig: resizeConfig,
     cameraConfig: cameraConfig,
     canvas: HTMLCanvasElement
   ) {
-    super(sizes, fpsInterval, resizeConfig, cameraConfig, canvas);
+    super(sizes, environmentConfig, resizeConfig, cameraConfig, canvas);
   }
 
   init(): void {
@@ -308,11 +314,11 @@ export class BasicThreeJsController extends ThreeJsEnvironment {
 export class Basic3DWithRaycaster extends ThreeJsEnvironment {
   constructor(
     public sizes: sizes,
-    fpsInterval: number,
+    environmentConfig: environmentConfig,
     resizeConfig: resizeConfig,
     cameraConfig: cameraConfig,
     canvas: HTMLCanvasElement
   ) {
-    super(sizes, fpsInterval, resizeConfig, cameraConfig, canvas);
+    super(sizes, environmentConfig, resizeConfig, cameraConfig, canvas);
   }
 }

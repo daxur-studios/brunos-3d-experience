@@ -3,6 +3,7 @@ import { ThreeJsEnvironment } from 'src/threeJsController';
 import {
   Mesh,
   MeshBasicMaterial,
+  MeshNormalMaterial,
   Raycaster,
   SphereGeometry,
   Vector3,
@@ -17,12 +18,14 @@ import * as dat from 'dat.gui';
 })
 export class RaycastLessonComponent implements OnInit {
   e!: ThreeJsEnvironment;
+  gui!: dat.GUI;
 
   constructor() {}
 
   ngOnInit(): void {
     // debug
-    const gui = new dat.GUI();
+    this.gui = new dat.GUI();
+    const gui = this.gui;
 
     // raycast lesson
 
@@ -32,7 +35,7 @@ export class RaycastLessonComponent implements OnInit {
 
     this.e = new ThreeJsEnvironment(
       { height: 600 ?? window.innerHeight, width: 800 ?? window.innerWidth },
-      500,
+      { fpsInterval: 500, WebGLRendererAlpha: true },
       {
         resizeable: true,
         evalHeight: '600', //'window.innerHeight',
@@ -48,7 +51,11 @@ export class RaycastLessonComponent implements OnInit {
 
     const redMat = new MeshBasicMaterial({ color: 'red' });
     const blueMat = new MeshBasicMaterial({ color: 'blue' });
+    blueMat.wireframe = true;
     const greenMat = new MeshBasicMaterial({ color: 'green' });
+
+    const normalMat = new MeshNormalMaterial();
+    normalMat.flatShading = true;
 
     const sphere = new SphereGeometry();
 
@@ -105,7 +112,7 @@ export class RaycastLessonComponent implements OnInit {
       const intersectsMouse = rayCasterForMouse.intersectObjects(test);
 
       for (const x of intersectsMouse) {
-        (x.object as Mesh).material = greenMat;
+        (x.object as Mesh).material = normalMat;
       }
     };
   }
@@ -114,6 +121,7 @@ export class RaycastLessonComponent implements OnInit {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.e.destroy();
+    this.gui.destroy();
   }
 
   ngAfterViewInit(): void {

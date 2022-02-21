@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DevTestComponent } from './modules/dev-test/dev-test.component';
+import { ModularBuildingComponent } from './modules/modular-building/modular-building.component';
 import { ParticlesLessonComponent } from './modules/particles-lesson/particles-lesson.component';
 import { RaycastLessonComponent } from './modules/raycast-lesson/raycast-lesson.component';
 
@@ -32,6 +33,14 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/particles-lesson/particles-lesson.module').then(
         (m) => m.ParticlesLessonModule
+      ),
+  },
+  {
+    component: ModularBuildingComponent,
+    path: 'modularBuilding',
+    loadChildren: () =>
+      import('./modules/modular-building/modular-building.module').then(
+        (m) => m.ModularBuildingModule
       ),
   },
 ];

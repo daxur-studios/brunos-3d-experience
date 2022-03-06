@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { DevTestComponent } from './modules/dev-test/dev-test.component';
+import { CSS3DLessonComponent } from './modules/lessons/css3-d-lesson/css3-d-lesson.component';
 import { DracoLessonComponent } from './modules/lessons/draco-lesson/draco-lesson.component';
 import { ModularBuildingComponent } from './modules/modular-building/modular-building.component';
 import { ParticlesLessonComponent } from './modules/particles-lesson/particles-lesson.component';
@@ -50,6 +51,14 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/lessons/draco-lesson/draco-lesson.module').then(
         (m) => m.DracoLessonModule
+      ),
+  },
+  {
+    path: 'CSS3D-lesson',
+    component: CSS3DLessonComponent,
+    loadChildren: () =>
+      import('./modules/lessons/css3-d-lesson/css3-d-lesson.module').then(
+        (m) => m.CSS3DLessonModule
       ),
   },
 ];

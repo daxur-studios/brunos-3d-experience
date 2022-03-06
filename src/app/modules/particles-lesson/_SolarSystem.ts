@@ -144,7 +144,7 @@ export class SolarSystem {
       //
       // const p = points.geometry.attributes.position.array;
 
-      const t = this.e.clock.getElapsedTime();
+      const t = this.e.ticker.clock.getElapsedTime();
 
       for (let i = 0; i < MAX_POINTS; i = i + 3) {
         const dist = start + basePlanetToPlanetDistance * i;

@@ -14,6 +14,7 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import gsap from 'gsap';
+import { Ticker } from './app/helpers/ticker';
 
 export type textureConfig = {
   path: string;
@@ -229,13 +230,18 @@ export class ThreeJsEnvironment {
     this.tick();
   }
 
-  clock: Clock = new Clock();
+  ticker = new Ticker();
+
   tick() {
     this.reqFrameId = window.requestAnimationFrame(() => {
       this.tick();
     });
 
     this.customTick();
+
+    this.ticker.tickerFunctions.forEach((fn) => {
+      fn();
+    });
 
     this.controls?.update();
 

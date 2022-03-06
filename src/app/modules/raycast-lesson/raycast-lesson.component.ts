@@ -95,7 +95,7 @@ export class RaycastLessonComponent implements OnInit {
     console.warn(this.e);
 
     this.e.customTick = () => {
-      const time = this.e.clock.getElapsedTime();
+      const time = this.e.ticker.clock.getElapsedTime();
       s1.position.y = Math.sin(time * 1.3) * 1.5;
       s2.position.y = Math.sin(time * 0.6) * 1.5;
       s3.position.y = Math.sin(time * 0.9) * 1.5;

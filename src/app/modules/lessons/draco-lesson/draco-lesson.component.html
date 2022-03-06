@@ -1,11 +1,17 @@
 <p>draco-lesson works!</p>
-<canvas
-  id="dracoCanvas"
-  [ngStyle]="{
-    width: e.sizes.width,
-    height: e.sizes.height,
-    border: 'dashed 2px indianred'
-  }"
-></canvas>
+<div style="display: flex; flex-wrap: wrap">
+  <div>
+    <canvas
+      id="dracoCanvas"
+      [ngStyle]="{
+        width: e.sizes.width,
+        height: e.sizes.height,
+        border: 'dashed 2px indianred'
+      }"
+    ></canvas>
 
-<div style="opacity: 0.5">FPS {{ e.measureFPS.FPS }}</div>
+    <div style="opacity: 0.5">FPS {{ e.measureFPS.FPS }}</div>
+  </div>
+
+  <div></div>
+</div>

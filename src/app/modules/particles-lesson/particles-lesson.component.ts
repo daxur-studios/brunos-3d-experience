@@ -13,6 +13,7 @@ import {
   Texture,
 } from 'three';
 import { SolarSystem } from './_SolarSystem';
+import { randomBetween } from '../lessons/draco-lesson/_stars';
 
 @Component({
   selector: 'app-particles-lesson',
@@ -151,17 +152,17 @@ export class ParticlesLessonComponent implements OnInit {
   }
 
   galaxyParams = {
-    count: 5070,
+    count: 60000,
     size: 0.02,
     radius: 2,
     branches: 3,
     spinPower: 1,
     spinFactor: 4.5,
     randomness: 0.2,
-    randomnessFactor: 4.6,
+    randomnessFactor: 10,
 
-    insideColor: '#ffc107',
-    outsideColor: '#3f51b5',
+    insideColor: '#0072a2',
+    outsideColor: '#3e1422',
   };
 
   async galaxy() {
@@ -227,18 +228,18 @@ export class ParticlesLessonComponent implements OnInit {
         const randomnessFactor = this.galaxyParams.randomnessFactor;
 
         const randomnessX =
-          Math.pow(Math.random(), randomnessFactor) *
-          (Math.random() < 0.5 ? 1 : -1) *
+          Math.pow(randomBetween(0, 1, false), randomnessFactor) *
+          randomBetween(-1, 1, false) *
           randomness;
 
         const randomnessY =
-          Math.pow(Math.random(), randomnessFactor) *
-          (Math.random() < 0.5 ? 1 : -1) *
+          Math.pow(randomBetween(0, 1, false), randomnessFactor) *
+          randomBetween(-1, 1, false) *
           randomness;
 
         const randomnessZ =
-          Math.pow(Math.random(), randomnessFactor) *
-          (Math.random() < 0.5 ? 1 : -1) *
+          Math.pow(randomBetween(0, 1, false), randomnessFactor) *
+          randomBetween(-1, 1, false) *
           randomness;
 
         const basePointPos = pointsDistance * pointIndex; // Base Equally Distributed Point Position Along Axis

@@ -8,6 +8,8 @@ import {
 } from 'three';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
+import gsap from 'gsap';
+
 export type workSlot = {
   thumbnailUrl: string;
   title: string;
@@ -88,6 +90,14 @@ export namespace TempleInnerBlock {
       this.mesh.add(floorMesh);
 
       return this.mesh;
+    }
+
+    spawnInAnimated(index: number, duration: number) {
+      gsap.fromTo(
+        this.mesh.scale,
+        { x: 0, y: 0, z: 0 },
+        { x: 1, y: 1, z: 1, delay: index / 10, duration: duration }
+      );
     }
   }
 }

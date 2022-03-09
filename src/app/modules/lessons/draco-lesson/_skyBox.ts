@@ -17,7 +17,14 @@ export class SkyBox {
     let materialArray: MeshBasicMaterial[] = [];
 
     //const names = ['front', 'back', 'top', 'bottom', 'right', 'left']; how it should work
-    const names = ['back', 'front', 'top', 'bottom', 'right', 'left']; // how it works with given nebula images
+    const names = [
+      'back-min',
+      'front-min',
+      'top-min',
+      'bottom-min',
+      'right-min',
+      'left-min',
+    ]; // how it works with given nebula images
     names.forEach((name) => {
       // const path = `assets/skyboxes/mountains/${name}.jpg`;
       //  const path = `assets/skyboxes/darkNebulae/${name}.png`;

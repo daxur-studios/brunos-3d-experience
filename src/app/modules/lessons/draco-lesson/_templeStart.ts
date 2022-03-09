@@ -8,6 +8,8 @@ import {
 } from 'three';
 import { TempleInnerBlock as TIB, workSlot } from './_templeInnerBlock';
 
+import gsap from 'gsap';
+
 export namespace TempleStart {
   export const columnWidth = TIB.columnWidth;
   export const columnHeight = 3.77;
@@ -129,6 +131,14 @@ export namespace TempleStart {
           instancedRoof.instanceMatrix.needsUpdate = true;
         }
       }
+    }
+
+    spawnInAnimated(index: number, duration: number) {
+      gsap.fromTo(
+        this.mesh.scale,
+        { x: 0, y: 0, z: 0 },
+        { x: 1, y: 1, z: 1, delay: index / 10, duration: duration }
+      );
     }
   }
 }

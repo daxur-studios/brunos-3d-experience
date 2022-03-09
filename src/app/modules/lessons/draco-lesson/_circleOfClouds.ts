@@ -11,6 +11,8 @@ import {
 } from 'three';
 import { degToRad } from 'three/src/math/MathUtils';
 
+import gsap from 'gsap';
+
 export class CircleOfClouds {
   mesh = new Mesh();
   instancedMesh!: InstancedMesh;
@@ -89,5 +91,13 @@ export class CircleOfClouds {
 
       this.mesh.rotation.y = this.e.ticker.clock.getElapsedTime() / 30;
     };
+  }
+
+  spawnInAnimated(index: number, duration: number) {
+    gsap.fromTo(
+      this.instancedMesh.material,
+      { opacity: 0 },
+      { opacity: 1, delay: index / 10, duration: duration }
+    );
   }
 }

@@ -14,7 +14,9 @@ import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
 import gsap from 'gsap';
+
 import { Ticker } from './app/helpers/ticker';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
 
 export type textureConfig = {
   path: string;
@@ -95,6 +97,9 @@ export class ThreeJsEnvironment {
   renderer!: WebGLRenderer;
   textureLoader!: TextureLoader;
 
+  // gltfLoader?: GLTFLoader;
+  // dracoLoader?: DRACOLoader;
+
   controls?: OrbitControls;
 
   cursor: cursor = {
@@ -112,7 +117,8 @@ export class ThreeJsEnvironment {
 
     private resizeConfig: resizeConfig,
     private cameraConfig: cameraConfig,
-    public canvas: HTMLCanvasElement
+    public canvas: HTMLCanvasElement,
+    public gltfLoader?: GLTFLoader
   ) {
     this.createCamera();
   }
@@ -151,7 +157,7 @@ export class ThreeJsEnvironment {
       this.controls.enableDamping = true;
 
       this.controls.enablePan = false; //disable move camera around with right click
-      console.warn('OrbitControls', this.controls, this.canvas);
+      //  console.warn('OrbitControls', this.controls, this.canvas);
     }
 
     // create rendered
@@ -202,7 +208,7 @@ export class ThreeJsEnvironment {
       const modelLoader = new GLTFLoader();
 
       modelLoader.load('assets/models/tealThyr.glb', (model) => {
-        console.warn({ model: model });
+        //  console.warn({ model: model });
 
         model.scene.scale.set(0.03, 0.03, 0.03);
         //   model.scene.position.x = -2;
@@ -263,6 +269,22 @@ export class ThreeJsEnvironment {
 
     window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('resize', this.onResize);
+
+    this.camera.clear();
+
+    this.scene.clear();
+    /*
+    if (this.dracoLoader) {
+      this.dracoLoader.dispose();
+      this.dracoLoader = undefined;
+    }
+*/
+    if (this.gltfLoader) {
+      this.gltfLoader.dracoLoader?.dispose?.();
+      this.gltfLoader = undefined;
+    }
+
+    //this.scene.ch
 
     this.renderer.dispose();
     this.renderer.forceContextLoss();

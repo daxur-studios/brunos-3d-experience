@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   BoxBufferGeometry,
   InstancedMesh,

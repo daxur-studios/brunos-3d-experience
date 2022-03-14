@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   Mesh,
   MeshBasicMaterial,
@@ -9,21 +9,20 @@ import {
   Vector3,
 } from 'three';
 
-import * as dat from 'dat.gui';
-
 @Component({
   selector: 'app-raycast-lesson',
   templateUrl: './raycast-lesson.component.html',
   styleUrls: ['./raycast-lesson.component.css'],
 })
 export class RaycastLessonComponent implements OnInit {
-  e!: ThreeJsEnvironment;
+  e!: ThreeJsWorld;
   gui!: dat.GUI;
 
   constructor() {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // debug
+    const dat = await import('dat.gui');
     this.gui = new dat.GUI();
     const gui = this.gui;
 
@@ -33,7 +32,7 @@ export class RaycastLessonComponent implements OnInit {
       'raycastCanvas'
     ) as HTMLCanvasElement;
 
-    this.e = new ThreeJsEnvironment(
+    this.e = new ThreeJsWorld(
       { height: 600 ?? window.innerHeight, width: 800 ?? window.innerWidth },
       { fpsInterval: 500, WebGLRendererAlpha: true },
       {
@@ -47,7 +46,7 @@ export class RaycastLessonComponent implements OnInit {
       canvas
     );
 
-    this.e.init3D('OrbitControls');
+    this.e.initWorld('OrbitControls');
 
     const redMat = new MeshBasicMaterial({ color: 'red' });
     const blueMat = new MeshBasicMaterial({ color: 'blue' });

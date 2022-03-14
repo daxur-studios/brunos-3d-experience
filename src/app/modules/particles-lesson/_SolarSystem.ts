@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   BufferAttribute,
   BufferGeometry,
@@ -20,7 +20,7 @@ export class SolarSystem {
     placementFactor: null,
   };
 
-  constructor(public e: ThreeJsEnvironment, private gui: dat.GUI) {}
+  constructor(public e: ThreeJsWorld, private gui: dat.GUI) {}
 
   reset() {
     this.e.scene.clear();

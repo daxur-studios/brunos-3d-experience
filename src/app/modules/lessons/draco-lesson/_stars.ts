@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   AdditiveBlending,
   BufferAttribute,
@@ -13,7 +13,7 @@ export class TempleStars {
   mesh = new Mesh();
 
   constructor(
-    private e: ThreeJsEnvironment,
+    private e: ThreeJsWorld,
     private starCount: number,
     private starSize: number,
     private radiusStart: number,

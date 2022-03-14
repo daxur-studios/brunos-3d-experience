@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 
 type room = {
   label: string;
@@ -13,7 +13,7 @@ type room = {
   styleUrls: ['./modular-building.component.css'],
 })
 export class ModularBuildingComponent implements OnInit {
-  e!: ThreeJsEnvironment;
+  e!: ThreeJsWorld;
 
   rooms: room[] = [
     {

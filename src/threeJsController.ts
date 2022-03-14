@@ -89,7 +89,7 @@ type cameraConfig = {
  *
  * use measureFPS.FPS to display current FPS
  */
-export class ThreeJsEnvironment {
+export class ThreeJsWorld {
   measureFPS = new MeasureFPS(this.environmentConfig.fpsInterval);
 
   scene!: Scene;
@@ -137,7 +137,20 @@ export class ThreeJsEnvironment {
     }
   }
 
-  async init3D(cameraControlType: 'OrbitControls') {
+  /**
+   * Starts the ticker function (requestAnimationFrame)
+   *
+   * Adds Orbit controls? TO DO: implement other way of camera controls
+   *
+   * Adds event listeners, such as mouse move and resize,
+   *
+   * Creates TextrureLoader
+   *
+   * Inits WebGL renderer
+   *
+   * @param cameraControlType - implement player class and remove from here??
+   */
+  async initWorld(cameraControlType: 'OrbitControls') {
     this.canvas.addEventListener('mousemove', (e) => {
       this.onMouseMove(e);
     });
@@ -175,61 +188,6 @@ export class ThreeJsEnvironment {
 
     // create textureLoaded - only need one
     this.textureLoader = new TextureLoader();
-
-    //const texturesToLoad = ['assets/matcaps/pastelBlueMatcap.png','assets/matcaps/clayMatcap.jpg'];
-
-    const textures: texturesConfig = {
-      pastelTealMatcap: {
-        path: 'assets/matcaps/Skeleton-Invert.png',
-        texture: null,
-      },
-    };
-    const texturePromises: Promise<any>[] = [];
-
-    for (const key in textures) {
-      texturePromises.push(
-        new Promise((r) => {
-          this.textureLoader.load(textures[key].path, (x) => {
-            textures[key].texture = x;
-            r(x);
-          });
-        })
-      );
-    }
-
-    await Promise.all(texturePromises);
-
-    // load 3d model
-    if (false) {
-      const thyrMaterial = new MeshMatcapMaterial({
-        matcap: textures.pastelTealMatcap.texture,
-      }); // matcap texture material
-
-      const modelLoader = new GLTFLoader();
-
-      modelLoader.load('assets/models/tealThyr.glb', (model) => {
-        //  console.warn({ model: model });
-
-        model.scene.scale.set(0.03, 0.03, 0.03);
-        //   model.scene.position.x = -2;
-        model.scene.position.y = -0.6;
-        model.scene.rotateY(90);
-
-        const t = model.scene.children[0];
-
-        this.camera.lookAt(t.position);
-
-        (t as any).material = thyrMaterial;
-
-        this.scene.add(model.scene);
-
-        gsap.fromTo(
-          this.scene.scale,
-          { x: 0, y: 0, z: 0, duration: 1 },
-          { z: 1, y: 1, x: 1, delay: 1 }
-        );
-      });
-    }
 
     this.renderer.render(this.scene, this.camera);
 
@@ -322,7 +280,7 @@ export class ThreeJsEnvironment {
  *
  * use measureFPS.FPS to display current FPS
  */
-export class BasicThreeJsController extends ThreeJsEnvironment {
+export class BasicThreeJsController extends ThreeJsWorld {
   constructor(
     public sizes: sizes,
     environmentConfig: environmentConfig,
@@ -335,11 +293,11 @@ export class BasicThreeJsController extends ThreeJsEnvironment {
   }
 
   init(): void {
-    this.init3D('OrbitControls');
+    this.initWorld('OrbitControls');
   }
 }
 
-export class Basic3DWithRaycaster extends ThreeJsEnvironment {
+export class Basic3DWithRaycaster extends ThreeJsWorld {
   constructor(
     public sizes: sizes,
     environmentConfig: environmentConfig,

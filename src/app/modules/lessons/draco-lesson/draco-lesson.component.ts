@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsEnvironment } from 'src/threeJsController';
-import * as dat from 'dat.gui';
+import { ThreeJsWorld } from 'src/threeJsController';
+
 import {
   AmbientLight,
   AxesHelper,
@@ -40,15 +40,16 @@ import { TempleGalaxy } from './_galaxy';
   styleUrls: ['./draco-lesson.component.css'],
 })
 export class DracoLessonComponent implements OnInit {
-  e!: ThreeJsEnvironment;
+  e!: ThreeJsWorld;
   gui!: dat.GUI;
 
   gltfLoader = new GLTFLoader();
 
   constructor() {}
 
-  ngOnInit(): void {
+  async ngOnInit() {
     // debug
+    const dat = await import('dat.gui');
     this.gui = new dat.GUI();
     const gui = this.gui;
 
@@ -56,7 +57,7 @@ export class DracoLessonComponent implements OnInit {
 
     const canvas = document.getElementById('dracoCanvas') as HTMLCanvasElement;
 
-    this.e = new ThreeJsEnvironment(
+    this.e = new ThreeJsWorld(
       { height: 600 ?? window.innerHeight, width: 800 ?? window.innerWidth },
       { fpsInterval: 500, WebGLRendererAlpha: true },
       {
@@ -72,7 +73,7 @@ export class DracoLessonComponent implements OnInit {
       this.gltfLoader
     );
 
-    this.e.init3D('OrbitControls');
+    this.e.initWorld('OrbitControls');
     this.initDracoLesson();
 
     const axesHelper = new AxesHelper(50);

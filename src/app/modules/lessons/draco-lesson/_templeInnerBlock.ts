@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   BoxBufferGeometry,
   InstancedMesh,
@@ -31,7 +31,7 @@ export namespace TempleInnerBlock {
 
     constructor(
       private workSlot: workSlot,
-      private e: ThreeJsEnvironment,
+      private e: ThreeJsWorld,
       private gltfLoader: GLTFLoader,
       private floorDepth: number,
       private templeMat: Material,

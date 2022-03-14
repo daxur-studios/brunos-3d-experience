@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   AdditiveBlending,
   BoxBufferGeometry,
@@ -21,7 +21,7 @@ export class CircleOfClouds {
     private imagePath: string,
     private numberOfClouds: number,
     private distanceFromCenter: number,
-    private e: ThreeJsEnvironment
+    private e: ThreeJsWorld
   ) {
     this.init();
   }

@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   BufferAttribute,
   Material,
@@ -20,7 +20,7 @@ export class BrunoPoints {
   loadedPromise: Promise<void>;
 
   constructor(
-    private e: ThreeJsEnvironment,
+    private e: ThreeJsWorld,
     private starSize: number,
 
     private baseMesh: Mesh

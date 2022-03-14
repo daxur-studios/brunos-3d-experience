@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 
-import * as dat from 'dat.gui';
 import {
   AdditiveBlending,
   BufferAttribute,
@@ -21,7 +20,7 @@ import { randomBetween } from '../lessons/draco-lesson/_stars';
   styleUrls: ['./particles-lesson.component.css'],
 })
 export class ParticlesLessonComponent implements OnInit {
-  e!: ThreeJsEnvironment;
+  e!: ThreeJsWorld;
   gui!: dat.GUI;
 
   solarSystem!: SolarSystem;
@@ -34,8 +33,9 @@ export class ParticlesLessonComponent implements OnInit {
     this.gui.destroy();
     this.e.destroy();
   }
-  ngOnInit(): void {
+  async ngOnInit() {
     // debug
+    const dat = await import('dat.gui');
     this.gui = new dat.GUI({ width: 600 });
     const gui = this.gui;
 
@@ -45,7 +45,7 @@ export class ParticlesLessonComponent implements OnInit {
       'particlesCanvas'
     ) as HTMLCanvasElement;
 
-    this.e = new ThreeJsEnvironment(
+    this.e = new ThreeJsWorld(
       { height: 600 ?? window.innerHeight, width: 800 ?? window.innerWidth },
       { fpsInterval: 500, WebGLRendererAlpha: true },
       {
@@ -59,7 +59,7 @@ export class ParticlesLessonComponent implements OnInit {
       canvas
     );
 
-    this.e.init3D('OrbitControls');
+    this.e.initWorld('OrbitControls');
 
     this.solarSystem = new SolarSystem(this.e, this.gui);
 

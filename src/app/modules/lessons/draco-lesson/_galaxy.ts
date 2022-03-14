@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import {
   AdditiveBlending,
   BufferAttribute,
@@ -14,7 +14,7 @@ export class TempleGalaxy {
   mesh = new Mesh();
 
   constructor(
-    private e: ThreeJsEnvironment,
+    private e: ThreeJsWorld,
     private count: number,
     private size: number,
     private radius: number,

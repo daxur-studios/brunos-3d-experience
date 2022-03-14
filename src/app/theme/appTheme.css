@@ -1,0 +1,17 @@
+:root {
+  --textColor: whiteSmoke;
+  --link: rgb(21, 96, 139);
+}
+
+.appTextColor {
+  color: var(--textColor);
+}
+.styledLink {
+  color: var(--link);
+  text-decoration: none;
+}
+.activeLink {
+  font-weight: 100;
+  font-size: 1.1em;
+  text-decoration: underline;
+}

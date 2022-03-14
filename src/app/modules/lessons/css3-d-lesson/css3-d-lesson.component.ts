@@ -1,7 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsEnvironment } from 'src/threeJsController';
-
-import * as dat from 'dat.gui';
+import { ThreeJsWorld } from 'src/threeJsController';
 
 @Component({
   selector: 'app-css3-d-lesson',
@@ -9,7 +7,7 @@ import * as dat from 'dat.gui';
   styleUrls: ['./css3-d-lesson.component.css'],
 })
 export class CSS3DLessonComponent implements OnInit {
-  e!: ThreeJsEnvironment;
+  e!: ThreeJsWorld;
   gui!: dat.GUI;
 
   constructor() {}
@@ -18,8 +16,9 @@ export class CSS3DLessonComponent implements OnInit {
     this.initLesson();
   }
 
-  initLesson() {
+  async initLesson() {
     // debug
+    const dat = await import('dat.gui');
     this.gui = new dat.GUI();
     const gui = this.gui;
 
@@ -27,7 +26,7 @@ export class CSS3DLessonComponent implements OnInit {
 
     const canvas = document.getElementById('threeCanvas') as HTMLCanvasElement;
 
-    this.e = new ThreeJsEnvironment(
+    this.e = new ThreeJsWorld(
       { height: 600 ?? window.innerHeight, width: 800 ?? window.innerWidth },
       { fpsInterval: 500, WebGLRendererAlpha: true },
       {

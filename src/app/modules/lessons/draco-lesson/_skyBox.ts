@@ -1,4 +1,4 @@
-import { ThreeJsEnvironment } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/threeJsController';
 import { BackSide, BoxGeometry, Mesh, MeshBasicMaterial } from 'three';
 
 export class SkyBox {
@@ -8,7 +8,7 @@ export class SkyBox {
    *
    * @param size used for skybox with height length box params
    */
-  constructor(private e: ThreeJsEnvironment, private size: number) {
+  constructor(private e: ThreeJsWorld, private size: number) {
     this.generateSkybox();
   }
   generateSkybox() {

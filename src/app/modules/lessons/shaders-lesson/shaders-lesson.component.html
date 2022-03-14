@@ -1,0 +1,12 @@
+<p>shaders-lesson works!</p>
+
+<canvas
+  id="threeCanvas"
+  [ngStyle]="{
+    width: e?.sizes?.width,
+    height: e?.sizes?.height,
+    border: 'dashed 2px indianred'
+  }"
+></canvas>
+
+<div style="opacity: 0.5" *ngIf="e">FPS {{ e.measureFPS.FPS }}</div>

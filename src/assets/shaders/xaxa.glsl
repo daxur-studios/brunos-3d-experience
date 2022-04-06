@@ -43,11 +43,13 @@ float random(in vec2 _st){
             // Rotate to reduce axial bias
             mat2 rot=mat2(cos(.5),sin(.5),
             -sin(.5),cos(.50));
+            
             for(int i=0;i<NUM_OCTAVES;++i){
                 v+=a*noise(_st);
                 _st=rot*_st*2.+shift;
                 a*=.5;
             }
+            //return .5;
             return v;
         }
         

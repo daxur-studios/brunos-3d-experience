@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsWorld } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 
 import {
   AmbientLight,
@@ -29,10 +29,11 @@ import { TempleStart as TS } from './_templeStart';
 import { SkyBox } from './_skyBox';
 import { degToRad } from 'three/src/math/MathUtils';
 import { workBlocks } from './BrunosPreviousWorks';
-import { randomBetween, randomBetweenSpherePoint, TempleStars } from './_stars';
+import { randomBetweenSpherePoint, TempleStars } from './_stars';
 import { BrunoPoints } from './_brunoPoints';
 import { fibonacciSphere } from 'src/app/helpers/3DMath';
 import { TempleGalaxy } from './_galaxy';
+import { randomBetween } from 'src/app/helpers/randomFunctions';
 
 @Component({
   selector: 'app-draco-lesson',
@@ -42,8 +43,6 @@ import { TempleGalaxy } from './_galaxy';
 export class DracoLessonComponent implements OnInit {
   e!: ThreeJsWorld;
   gui!: dat.GUI;
-
-  gltfLoader = new GLTFLoader();
 
   constructor() {}
 
@@ -70,7 +69,7 @@ export class DracoLessonComponent implements OnInit {
         far: 10000,
       },
       canvas,
-      this.gltfLoader
+      new GLTFLoader()
     );
 
     this.e.initWorld('OrbitControls');
@@ -162,16 +161,17 @@ export class DracoLessonComponent implements OnInit {
      *  CREATE DRACO LOADER
      */
 
+    /*
     const dracoLoader = new DRACOLoader();
     dracoLoader.setDecoderPath('assets/draco/'); // use Web Assembly version
 
-    this.gltfLoader.setDRACOLoader(dracoLoader);
-
+    this.e.gltfLoader!.setDRACOLoader(dracoLoader);
+*/
     /**
      * Test loading a compressed model
      */
 
-    const colGltf = await this.gltfLoader.loadAsync(
+    const colGltf = await this.e.gltfLoader!.loadAsync(
       'assets/models/templeColumn.glb'
     );
     const baseColMesh: Mesh = colGltf.scene.children[0] as Mesh;
@@ -188,7 +188,7 @@ export class DracoLessonComponent implements OnInit {
       const workBlock = new TIB.MeshBuilder(
         blockData,
         this.e,
-        this.gltfLoader,
+        this.e.gltfLoader!,
         TS.columnCount * 2 * TS.columnWidth,
         templeMat,
         colGltf.scene.children[0] as Mesh
@@ -207,7 +207,7 @@ export class DracoLessonComponent implements OnInit {
     /**
      * Test loading in roof
      */
-    const roofGltf = await this.gltfLoader.loadAsync(
+    const roofGltf = await this.e.gltfLoader!.loadAsync(
       'assets/models/RoofV2.glb'
     );
     //console.warn(roofGltf);
@@ -267,7 +267,7 @@ export class DracoLessonComponent implements OnInit {
     /**
      * Test loading in bruno star points
      */
-    const brunoGltf = await this.gltfLoader.loadAsync(
+    const brunoGltf = await this.e.gltfLoader!.loadAsync(
       'assets/models/brunoPoints2.glb'
     );
     console.warn(brunoGltf);

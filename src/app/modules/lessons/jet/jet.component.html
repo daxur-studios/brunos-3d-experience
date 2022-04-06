@@ -1,0 +1,11 @@
+<canvas
+  #threeCanvas
+  id="threeCanvas"
+  [ngStyle]="{
+    width: w?.sizes?.width,
+    height: w?.sizes?.height,
+    border: 'dashed 2px indianred'
+  }"
+></canvas>
+
+<div style="opacity: 0.5" *ngIf="w">FPS {{ w.measureFPS.FPS }}</div>

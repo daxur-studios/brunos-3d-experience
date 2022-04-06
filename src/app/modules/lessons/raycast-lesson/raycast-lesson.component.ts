@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsWorld } from 'src/threeJsController';
+import { randomBetween } from 'src/app/helpers/randomFunctions';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 import {
   Mesh,
   MeshBasicMaterial,
@@ -8,6 +9,8 @@ import {
   SphereGeometry,
   Vector3,
 } from 'three';
+import { InteractiveParticle } from './InteractiveParticle';
+import { InteractiveObjectManager } from './InteractiveObjectManager';
 
 @Component({
   selector: 'app-raycast-lesson',
@@ -15,7 +18,7 @@ import {
   styleUrls: ['./raycast-lesson.component.css'],
 })
 export class RaycastLessonComponent implements OnInit {
-  e!: ThreeJsWorld;
+  w!: ThreeJsWorld;
   gui!: dat.GUI;
 
   constructor() {}
@@ -32,7 +35,7 @@ export class RaycastLessonComponent implements OnInit {
       'raycastCanvas'
     ) as HTMLCanvasElement;
 
-    this.e = new ThreeJsWorld(
+    this.w = new ThreeJsWorld(
       { height: 600 ?? window.innerHeight, width: 800 ?? window.innerWidth },
       { fpsInterval: 500, WebGLRendererAlpha: true },
       {
@@ -46,7 +49,9 @@ export class RaycastLessonComponent implements OnInit {
       canvas
     );
 
-    this.e.initWorld('OrbitControls');
+    this.w.initWorld('OrbitControls');
+
+    this.w.camera.position.z = 10;
 
     const redMat = new MeshBasicMaterial({ color: 'red' });
     const blueMat = new MeshBasicMaterial({ color: 'blue' });
@@ -67,7 +72,7 @@ export class RaycastLessonComponent implements OnInit {
     const s3 = new Mesh(sphere, redMat);
     s3.position.x = -2;
 
-    this.e.scene.add(s1, s2, s3);
+    this.w.scene.add(s1, s2, s3);
 
     gui.add(s1.position, 'z').min(-3).max(3).step(0.01).name('s1 z');
     gui.add(blueMat, 'wireframe');
@@ -91,10 +96,10 @@ export class RaycastLessonComponent implements OnInit {
 
     const test = [s1, s2, s3];
 
-    console.warn(this.e);
+    console.warn(this.w);
 
-    this.e.customTick = () => {
-      const time = this.e.ticker.clock.getElapsedTime();
+    this.w.customTick = () => {
+      const time = this.w.ticker.clock.getElapsedTime();
       s1.position.y = Math.sin(time * 1.3) * 1.5;
       s2.position.y = Math.sin(time * 0.6) * 1.5;
       s3.position.y = Math.sin(time * 0.9) * 1.5;
@@ -107,19 +112,85 @@ export class RaycastLessonComponent implements OnInit {
         (x.object as Mesh).material = blueMat;
       }
 
-      rayCasterForMouse.setFromCamera(this.e.cursor, this.e.camera);
+      rayCasterForMouse.setFromCamera(this.w.cursor, this.w.camera);
       const intersectsMouse = rayCasterForMouse.intersectObjects(test);
 
       for (const x of intersectsMouse) {
         (x.object as Mesh).material = normalMat;
       }
     };
+
+    this.clickableParticleTest();
+  }
+
+  async clickableParticleTest() {
+    console.debug('wtf?');
+
+    const clickManager = this.w.getInteractiveObjectManager(); // new InteractiveObjectManager(this.w);
+
+    console.debug(clickManager);
+    /**
+     * Generate large amount of clickable particles, that run efficiently with raycast, without looping through every single item
+     */
+    const texture = await this.w.textureLoader.loadAsync(
+      'assets/particles/clickableParticle.png'
+    );
+
+    const count = 50;
+    for (let i = 0; i < count; i++) {
+      const clickableParticle = new InteractiveParticle(clickManager, texture, {
+        baseColor: new Float32Array([0.9, 0.2, 0.3]),
+        hoverColor: new Float32Array([1, 1, 1]),
+      });
+
+      const distMultiplier = 25;
+
+      clickableParticle.position.set(
+        randomBetween(-1, 1, false) * distMultiplier,
+        randomBetween(-1, 1, false) * distMultiplier,
+        randomBetween(-1, 1, false) * distMultiplier
+      );
+
+      clickableParticle.onClick = async () => {
+        // move orbit controls to center particle?
+        console.debug('clickableParticle onclick!');
+        // clickableParticle.destroy();
+        const p = clickableParticle.position;
+        const gsap = await this.w.getGsap();
+
+        if (this.w.controls) {
+          gsap.to(this.w.controls.target, {
+            x: p.x,
+            y: p.y,
+            z: p.z,
+            onStart: () => {
+              if (this.w?.controls) {
+                this.w.controls.minDistance = this.w.controls.getDistance();
+                this.w.controls.maxDistance = this.w.controls.getDistance();
+                this.w.controls.enableZoom = false;
+              }
+            },
+            onComplete: () => {
+              if (this.w?.controls) {
+                this.w.controls.minDistance = 0.1;
+                this.w.controls.maxDistance = Infinity;
+                this.w.controls.enableZoom = true;
+              }
+            },
+          });
+        }
+
+        //   this.w.controls?.target.set(p.x, p.y, p.z);
+      };
+
+      this.w.scene.add(clickableParticle);
+    }
   }
 
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
-    this.e.destroy();
+    this.w.destroy();
     this.gui.destroy();
   }
 

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsWorld } from 'src/threeJsController';
+import { randomBetween } from 'src/app/helpers/randomFunctions';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 
 import {
   AdditiveBlending,
@@ -12,7 +13,6 @@ import {
   Texture,
 } from 'three';
 import { SolarSystem } from './_SolarSystem';
-import { randomBetween } from '../lessons/draco-lesson/_stars';
 
 @Component({
   selector: 'app-particles-lesson',

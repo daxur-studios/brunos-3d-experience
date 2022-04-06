@@ -1,4 +1,5 @@
-import { ThreeJsWorld } from 'src/threeJsController';
+import { randomBetween } from 'src/app/helpers/randomFunctions';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 import {
   AdditiveBlending,
   BufferAttribute,
@@ -8,7 +9,6 @@ import {
   Points,
   PointsMaterial,
 } from 'three';
-import { randomBetween } from './_stars';
 
 export class TempleGalaxy {
   mesh = new Mesh();

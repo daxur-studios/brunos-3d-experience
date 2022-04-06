@@ -1,4 +1,4 @@
-import { ThreeJsWorld } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 import {
   BufferAttribute,
   Material,
@@ -7,9 +7,9 @@ import {
   PointsMaterial,
   SphereBufferGeometry,
 } from 'three';
-import { randomBetween } from './_stars';
 
 import gsap from 'gsap';
+import { randomBetween } from 'src/app/helpers/randomFunctions';
 
 export class BrunoPoints {
   mesh = new Mesh();

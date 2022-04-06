@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ThreeJsWorld } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 
 type room = {
   label: string;

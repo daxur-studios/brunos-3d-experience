@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { coolNoise } from 'src/assets/shaders/coolNoise/coolNoise';
-import { ThreeJsWorld } from 'src/threeJsController';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 import {
   BufferAttribute,
   FileLoader,
@@ -9,8 +9,10 @@ import {
   PlaneBufferGeometry,
   RawShaderMaterial,
   ShaderMaterial,
+  SphereBufferGeometry,
   TorusKnotGeometry,
 } from 'three';
+import { hexToRgb } from 'src/app/helpers/colorHelpers';
 
 //import vst from '../../../../assets/shaders/vertexShaderTest';
 //import fst from '../../../../assets/shaders/fragmentShaderTest';
@@ -20,11 +22,16 @@ import {
   templateUrl: './shaders-lesson.component.html',
   styleUrls: ['./shaders-lesson.component.css'],
 })
-export class ShadersLessonComponent implements OnInit {
+export class ShadersLessonComponent implements OnInit, OnDestroy {
   e!: ThreeJsWorld;
   gui!: dat.GUI;
 
   constructor() {}
+
+  ngOnDestroy(): void {
+    this.e.destroy();
+    this.gui.destroy();
+  }
 
   async ngOnInit() {
     // debug
@@ -52,72 +59,83 @@ export class ShadersLessonComponent implements OnInit {
 
     this.e.initWorld('OrbitControls');
 
+    this.initGui();
     this.initShadersLesson();
   }
 
+  generate() {
+    this.e.scene.clear();
+    this.initShadersLesson();
+  }
+
+  guiParams = {
+    scale: 5,
+    color1: '#ffeb3b',
+    color2: '#e91e63',
+    sharpness: 2,
+  };
+
+  async initGui() {
+    this.gui
+      .add(this.guiParams, 'scale', 0.01, 30, 0.01)
+      // .onChange(() => this.generate())
+      .onFinishChange(() => this.generate());
+
+    this.gui.addColor(this.guiParams, 'color1').onFinishChange(() => {
+      this.generate();
+    });
+    this.gui.addColor(this.guiParams, 'color2').onFinishChange(() => {
+      this.generate();
+    });
+
+    this.gui
+      .add(this.guiParams, 'sharpness', 0.01, 100, 0.01)
+      .onFinishChange(() => {
+        this.generate();
+      });
+  }
+
   async initShadersLesson() {
-    //
+    const folder = 'Simplex 3D Noise';
+    //  const folder='3D Cubic Noise';
 
-    // const testShader = require('../../../../assets/shaders/test.glsl');
-    /*
-    const vst = await import(
-      '../../../../assets/shaders/vertexShaderTest.glsl'
-    );
-    const fst = await import(
-      '../../../../assets/shaders/fragmentShaderTest.glsl'
-    );
-*/
+    const noseTestV = await (
+      await fetch('assets/shaders/' + folder + '/vertex.glsl')
+    ).text();
+    const noseTestFragment = await (
+      await fetch('assets/shaders/' + folder + '/fragment4D.glsl')
+    ).text();
 
-    const fkoff = new FileLoader();
-    const vst = await fkoff.loadAsync(
-      '../../../../assets/shaders/test/vertexShaderTest.glsl'
-    );
-    const fst = await fkoff.loadAsync(
-      '../../../../assets/shaders/test/fragmentShaderTest.glsl'
-    );
+    const sphereGeo = new SphereBufferGeometry(1, 30, 30);
 
-    const noseTestV = await fkoff.loadAsync(
-      '../../../../assets/shaders/3D Cubic Noise/vertex.glsl'
-    );
-
-    const noseTestFragment = await fkoff.loadAsync(
-      '../../../../assets/shaders/3D Cubic Noise/fragment.glsl'
-    );
-    //const xaxa = await fkoff.loadAsync('../../../../assets/shaders/xaxa.glsl');
-
-    console.warn(fst, vst);
-    //   const vst = require('../../../../assets/shaders/vertexShaderTest.glsl');
-    //   const fst = require('../../../../assets/shaders/fragmentShaderTest.glsl');
-
-    // shaderMaterialTest.wireframe = true;
-
-    //const basicMaterial = new MeshBasicMaterial();
-
-    //const torus = new Mesh(new TorusKnotGeometry(), shaderTestMaterial);
-
-    const planeGeo = new PlaneBufferGeometry(2, 2, 100, 100);
-
-    const randoms = new Float32Array(planeGeo.attributes.position.count);
+    const randoms = new Float32Array(sphereGeo.attributes.position.count);
     randoms.forEach((r, i) => {
       randoms[i] = Math.random();
     });
 
-    planeGeo.setAttribute('aRandom', new BufferAttribute(randoms, 1));
+    sphereGeo.setAttribute('aRandom', new BufferAttribute(randoms, 1));
 
-    console.warn(planeGeo);
-
+    // console.warn(sphereGeo);
+    console.debug(hexToRgb(this.guiParams.color1));
     const shaderMaterialTest = new ShaderMaterial({
       vertexShader: noseTestV as any as string,
       fragmentShader: noseTestFragment as any as string,
+      uniforms: {
+        scale: { value: this.guiParams.scale },
+        color1: { value: hexToRgb(this.guiParams.color1) },
+        color2: { value: hexToRgb(this.guiParams.color2) },
+        sharpness: { value: this.guiParams.sharpness },
+        time: this.e.uniforms.time as any,
+      },
     });
 
-    const planeMesh = new Mesh(planeGeo, shaderMaterialTest);
+    const planeMesh = new Mesh(sphereGeo, shaderMaterialTest);
 
     //this.e.scene.add(orb);
 
     this.e.scene.add(planeMesh);
 
-    const coolNoiseTest = coolNoise();
-    console.warn(coolNoiseTest);
+    //const coolNoiseTest = coolNoise();
+    //console.warn(coolNoiseTest);
   }
 }

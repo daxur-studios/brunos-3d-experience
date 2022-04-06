@@ -1,6 +1,10 @@
 varying vec3 vPosition;
-float scale=5.;
 
+uniform float scale;
+uniform float sharpness;
+uniform vec3 color1;
+uniform vec3 color2;
+uniform float time;
 //
 // GLSL textureless classic 3D noise "cnoise",
 // with an RSL-style periodic variant "pnoise".
@@ -106,10 +110,18 @@ float cnoise(vec3 P)
     vec4 n_z=mix(vec4(n000,n100,n010,n110),vec4(n001,n101,n011,n111),fade_xyz.z);
     vec2 n_yz=mix(n_z.xy,n_z.zw,fade_xyz.y);
     float n_xyz=mix(n_yz.x,n_yz.y,fade_xyz.x);
-    return 2.2*n_xyz;
+    return sharpness*n_xyz;
 }
 
 void main(){
-    float n=cnoise(vPosition*scale);
-    gl_FragColor=vec4(1.*n,1.*n,1.*n,1.);
+    float pct=abs(sin(time)/2.)+2.;
+    
+    float n=cnoise(vPosition*scale*pct);
+    
+    vec3 sassy=mix(color1,color2,1.*n);
+    
+    //  vec3 sassy=mix(color1,color2,pct);
+    
+    gl_FragColor=vec4(sassy,1.);
+    // gl_FragColor=vec4(1.*n,1.*n,1.*n,1.);
 }

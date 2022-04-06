@@ -1,59 +1,28 @@
 // Option 2: Import just the parts you need.
 import {
-  AxesHelper,
-  Clock,
-  MeshMatcapMaterial,
+  AmbientLight,
   PerspectiveCamera,
   Scene,
-  Texture,
   TextureLoader,
+  Uniform,
   Vector3,
   WebGLRenderer,
 } from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
-import gsap from 'gsap';
+//import gsap from 'gsap';
 
-import { Ticker } from './app/helpers/ticker';
+import { Ticker } from './ticker';
+//import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
+import { BehaviorSubject } from 'rxjs';
+import { MeasureFPS } from './MeasureFPS';
+import { InteractiveObjectManager } from 'src/app/modules/lessons/raycast-lesson/InteractiveObjectManager';
+
+//import type * as gsap from 'gsap';
+
+import type { gsap } from 'gsap';
 import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader';
-
-export type textureConfig = {
-  path: string;
-  texture: Texture | null;
-};
-export type texturesConfig = {
-  [name: string]: textureConfig;
-};
-
-/**
- * Measure Frame Rate Per Second
- *
- * HOW TO USE: create new MeasureFPS on init, and add measureFPS.atTick() inside your tick function
- *
- * use measureFPS.FPS to display current FPS
- */
-export class MeasureFPS {
-  constructor(private displayIntervalMS: number) {}
-
-  public FPS: number = 60;
-
-  public prevNow = performance.now();
-  private displayTime = performance.now();
-
-  atTick() {
-    const now = performance.now();
-
-    const fps = 1 / ((now - this.prevNow) / 1000);
-
-    if (now - this.displayTime >= this.displayIntervalMS) {
-      this.displayTime = now;
-      this.FPS = Math.round(fps);
-    }
-
-    this.prevNow = now;
-  }
-}
 
 type sizes = {
   width: number;
@@ -83,8 +52,13 @@ type cameraConfig = {
   position?: Vector3;
 };
 
+type worldEvents = {
+  // click$: BehaviorSubject<{ x: number; y: number } | null>;
+  onClickSubscribers: Map<any, { onClick: () => void; [any: string]: any }>;
+};
+
 /**
- * Basic Three Js Controller, with camera and FPS measurer
+ * Basic Three Js Scene & Renderer & Camera & Orbit Controller, as wel las FPS measurer
  *
  *
  * use measureFPS.FPS to display current FPS
@@ -107,6 +81,8 @@ export class ThreeJsWorld {
     y: 0,
   };
 
+  uniforms: { [key: string]: Partial<Uniform> } = { time: { value: 0 } };
+
   //  canvas?: HTMLElement | null;
 
   reqFrameId: number = 0;
@@ -121,6 +97,15 @@ export class ThreeJsWorld {
     public gltfLoader?: GLTFLoader
   ) {
     this.createCamera();
+
+    /**
+     *  CREATE DRACO LOADER
+     */
+    if (this.gltfLoader) {
+      const dracoLoader = new DRACOLoader();
+      dracoLoader.setDecoderPath('assets/draco/'); // use Web Assembly version
+      this.gltfLoader!.setDRACOLoader(dracoLoader);
+    }
   }
 
   createCamera() {
@@ -150,9 +135,16 @@ export class ThreeJsWorld {
    *
    * @param cameraControlType - implement player class and remove from here??
    */
-  async initWorld(cameraControlType: 'OrbitControls') {
+  async initWorld(
+    cameraControlType: 'OrbitControls',
+    ambientLightConfig?: { intensity: number }
+  ) {
     this.canvas.addEventListener('mousemove', (e) => {
       this.onMouseMove(e);
+    });
+
+    this.canvas.addEventListener('click', (e) => {
+      this.onClick(e);
     });
 
     window.addEventListener('resize', (e) => {
@@ -161,6 +153,11 @@ export class ThreeJsWorld {
 
     // create scene
     this.scene = new Scene();
+
+    if (ambientLightConfig) {
+      this._ambientLightConfig = ambientLightConfig;
+      this.addAmbientLighting();
+    }
 
     //  this.canvas = document.getElementById('threeJsCanvas');
 
@@ -194,6 +191,27 @@ export class ThreeJsWorld {
     this.tick();
   }
 
+  private _ambientLightConfig?: { intensity: number };
+  private _ambientLight?: AmbientLight;
+  /**
+   * Adds lighting for pysical materials
+   */
+  addAmbientLighting() {
+    if (this._ambientLight) {
+      this._ambientLight.intensity = 0;
+      this._ambientLight.visible = false;
+      this._ambientLight.layers.toggle(0);
+
+      this.scene.remove(this._ambientLight);
+      this._ambientLight = null as any;
+    }
+    this._ambientLight = new AmbientLight(
+      undefined,
+      this._ambientLightConfig?.intensity
+    );
+    this.scene.add(this._ambientLight);
+  }
+
   ticker = new Ticker();
 
   tick() {
@@ -202,6 +220,8 @@ export class ThreeJsWorld {
     });
 
     this.customTick();
+
+    this.uniforms.time.value = this.ticker.clock.getElapsedTime();
 
     this.ticker.tickerFunctions.forEach((fn) => {
       fn();
@@ -225,8 +245,10 @@ export class ThreeJsWorld {
   destroy(): void {
     window.cancelAnimationFrame(this.reqFrameId);
 
-    window.removeEventListener('mousemove', this.onMouseMove);
     window.removeEventListener('resize', this.onResize);
+
+    this.canvas.removeEventListener('mousemove', this.onMouseMove);
+    this.canvas.removeEventListener('click', this.onClick);
 
     this.camera.clear();
 
@@ -254,6 +276,12 @@ export class ThreeJsWorld {
     this.cursor.y = -((e.offsetY / this.sizes.height) * 2 - 1);
   }
 
+  onClick(e: MouseEvent) {
+    if (this._interactiveObjectManager) {
+      this._interactiveObjectManager.onClick();
+    }
+  }
+
   onResize(e: UIEvent) {
     if (this.resizeConfig.resizeable) {
       this.sizes.width = this.resizeConfig.evalWidth
@@ -271,40 +299,24 @@ export class ThreeJsWorld {
       this.renderer.setSize(this.sizes.width, this.sizes.height, true);
     }
   }
-}
 
-/**
- * Basic Three Js Controller, with camera and FPS measurer
- *
- * HOW TO USE: create new MeasureFPS on init, and add measureFPS.atTick() inside your tick function
- *
- * use measureFPS.FPS to display current FPS
- */
-export class BasicThreeJsController extends ThreeJsWorld {
-  constructor(
-    public sizes: sizes,
-    environmentConfig: environmentConfig,
-
-    resizeConfig: resizeConfig,
-    cameraConfig: cameraConfig,
-    canvas: HTMLCanvasElement
-  ) {
-    super(sizes, environmentConfig, resizeConfig, cameraConfig, canvas);
+  _interactiveObjectManager?: InteractiveObjectManager;
+  getInteractiveObjectManager() {
+    if (!this._interactiveObjectManager) {
+      this._interactiveObjectManager = new InteractiveObjectManager(this);
+    }
+    return this._interactiveObjectManager;
   }
 
-  init(): void {
-    this.initWorld('OrbitControls');
-  }
-}
+  _gsap?: typeof gsap;
+  /**
+   * imports gsap asynchronously
+   */
+  async getGsap() {
+    if (!this._gsap) {
+      this._gsap = (await import('gsap')).gsap;
+    }
 
-export class Basic3DWithRaycaster extends ThreeJsWorld {
-  constructor(
-    public sizes: sizes,
-    environmentConfig: environmentConfig,
-    resizeConfig: resizeConfig,
-    cameraConfig: cameraConfig,
-    canvas: HTMLCanvasElement
-  ) {
-    super(sizes, environmentConfig, resizeConfig, cameraConfig, canvas);
+    return this._gsap;
   }
 }

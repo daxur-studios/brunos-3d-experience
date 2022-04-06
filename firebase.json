@@ -2,12 +2,10 @@
   "hosting": {
     "target": "brunos-abstract-site",
     "public": "dist/brunos-abstract-site",
-    "ignore": [
-      "**/.*"
-    ],
+    "ignore": ["**/.*"],
     "headers": [
       {
-        "source": "*.[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f].+(css|js)",
+        "source": "**",
         "headers": [
           {
             "key": "Cache-Control",

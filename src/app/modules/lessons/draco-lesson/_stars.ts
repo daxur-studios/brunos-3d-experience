@@ -1,4 +1,5 @@
-import { ThreeJsWorld } from 'src/threeJsController';
+import { randomBetween } from 'src/app/helpers/randomFunctions';
+import { ThreeJsWorld } from 'src/app/controllers/three/ThreeJsWorld.controller';
 import {
   AdditiveBlending,
   BufferAttribute,
@@ -132,17 +133,4 @@ export function randomBetweenSpherePoint(
   // const z = z0 + radius * Math.cos(phi);
   //  const z = z0 + radius * Math.cos(phi) * Math.cos(theta);
   return [x, y, z];
-}
-
-export function randomBetween(
-  min: number,
-  max: number,
-  isWholeNumber: boolean
-) {
-  const rand = Math.random() * (max - min) + min;
-  if (isWholeNumber) {
-    return Math.round(rand);
-  } else {
-    return Math.random() * (max - min) + min;
-  }
 }

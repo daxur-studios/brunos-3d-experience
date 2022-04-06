@@ -1,32 +1,26 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { DevTestComponent } from './modules/dev-test/dev-test.component';
+import { DevTestComponent } from './modules/lessons/dev-test/dev-test.component';
 import { CSS3DLessonComponent } from './modules/lessons/css3-d-lesson/css3-d-lesson.component';
 import { DracoLessonComponent } from './modules/lessons/draco-lesson/draco-lesson.component';
 import { ShadersLessonComponent } from './modules/lessons/shaders-lesson/shaders-lesson.component';
-import { ModularBuildingComponent } from './modules/modular-building/modular-building.component';
-import { ParticlesLessonComponent } from './modules/particles-lesson/particles-lesson.component';
-import { RaycastLessonComponent } from './modules/raycast-lesson/raycast-lesson.component';
+import { ModularBuildingComponent } from './modules/lessons/modular-building/modular-building.component';
+import { ParticlesLessonComponent } from './modules/lessons/particles-lesson/particles-lesson.component';
+import { RaycastLessonComponent } from './modules/lessons/raycast-lesson/raycast-lesson.component';
 
 const routes: Routes = [
   {
-    path: 'dev-test',
-    loadChildren: () =>
-      import('./modules/dev-test/dev-test.module').then((m) => m.DevTestModule),
-    component: DevTestComponent,
-  },
-  {
     path: 'worksitePrototype',
     loadChildren: () =>
-      import('./modules/worksite-prototype/worksite-prototype.module').then(
-        (m) => m.WorksitePrototypeModule
-      ),
+      import(
+        './modules/lessons/worksite-prototype/worksite-prototype.module'
+      ).then((m) => m.WorksitePrototypeModule),
   },
   {
     path: 'raycast-lesson',
     component: RaycastLessonComponent,
     loadChildren: () =>
-      import('./modules/raycast-lesson/raycast-lesson.module').then(
+      import('./modules/lessons/raycast-lesson/raycast-lesson.module').then(
         (m) => m.RaycastLessonModule
       ),
   },
@@ -34,7 +28,7 @@ const routes: Routes = [
     path: 'particles-lesson',
     component: ParticlesLessonComponent,
     loadChildren: () =>
-      import('./modules/particles-lesson/particles-lesson.module').then(
+      import('./modules/lessons/particles-lesson/particles-lesson.module').then(
         (m) => m.ParticlesLessonModule
       ),
   },
@@ -42,7 +36,7 @@ const routes: Routes = [
     component: ModularBuildingComponent,
     path: 'modularBuilding',
     loadChildren: () =>
-      import('./modules/modular-building/modular-building.module').then(
+      import('./modules/lessons/modular-building/modular-building.module').then(
         (m) => m.ModularBuildingModule
       ),
   },
@@ -69,6 +63,18 @@ const routes: Routes = [
       import('./modules/lessons/shaders-lesson/shaders-lesson.module').then(
         (m) => m.ShadersLessonModule
       ),
+  },
+  {
+    path: 'procedural-flower-lesson',
+    loadChildren: () =>
+      import(
+        './modules/lessons/procedural-flower-lesson/procedural-flower-lesson.module'
+      ).then((m) => m.ProceduralFlowerLessonModule),
+  },
+  {
+    path: 'jet',
+    loadChildren: () =>
+      import('./modules/lessons/jet/jet.module').then((m) => m.JetModule),
   },
 ];
 

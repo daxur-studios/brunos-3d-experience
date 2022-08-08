@@ -3,20 +3,20 @@ import { Subscription } from 'rxjs';
 /**
  * use this to easily manage subscriptions */
 export class SubscriptionContainer {
-  public subs: Subscription[] = [];
+  private _subs: Subscription[] = [];
 
   set add(s: Subscription) {
-    this.subs.push(s);
+    this._subs.push(s);
   }
 
   dispose() {
-    this.subs.forEach((s) => {
+    this._subs.forEach((s) => {
       try {
         s.unsubscribe();
       } catch (error) {
         console.error(error);
       }
     });
-    this.subs = [];
+    this._subs = [];
   }
 }

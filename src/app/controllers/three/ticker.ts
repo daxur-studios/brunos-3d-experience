@@ -1,5 +1,8 @@
 import { Clock } from 'three';
 
+/**
+ * To be used with ThreeJsWorldController
+ */
 export class Ticker {
   constructor() {}
 

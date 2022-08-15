@@ -60,7 +60,7 @@ export class DracoLessonComponent implements OnInit {
       { height: 600 ?? window.innerHeight, width: 800 ?? window.innerWidth },
       { fpsInterval: 500, WebGLRendererAlpha: true },
       {
-        resizeable: true,
+        resizable: true,
         evalHeight: '600', //'window.innerHeight',
         evalWidth: '800', //'window.innerWidth',
       },

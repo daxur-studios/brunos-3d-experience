@@ -39,7 +39,7 @@ type environmentConfig = {
 };
 
 type resizeConfig = {
-  resizeable: boolean;
+  resizable: boolean;
   evalWidth?: string;
   evalHeight?: string;
 };
@@ -283,7 +283,7 @@ export class ThreeJsWorld {
   }
 
   onResize(e: UIEvent) {
-    if (this.resizeConfig.resizeable) {
+    if (this.resizeConfig.resizable) {
       this.sizes.width = this.resizeConfig.evalWidth
         ? eval(this.resizeConfig.evalWidth)
         : window.innerWidth;

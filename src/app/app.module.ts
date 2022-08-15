@@ -17,12 +17,18 @@ import { provideFunctions, getFunctions } from '@angular/fire/functions';
 import { provideMessaging, getMessaging } from '@angular/fire/messaging';
 import { providePerformance, getPerformance } from '@angular/fire/performance';
 import { provideStorage, getStorage } from '@angular/fire/storage';
+import { ThreeModule } from '@daxur-studios/three';
+import { AngularCoreModule } from '@daxur-studios/angular-core';
+import { FirebaseCoreModule } from '@daxur-studios/firebase-core';
 
 @NgModule({
   declarations: [AppComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
+    ThreeModule,
+    AngularCoreModule,
+    FirebaseCoreModule,
     provideFirebaseApp(() => initializeApp(environment.firebase)),
     provideAnalytics(() => getAnalytics()),
     provideAuth(() => getAuth()),

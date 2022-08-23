@@ -1,0 +1,50 @@
+<svg width="1000" height="1000">
+  <g
+    app-my-custom-shape
+    [options]="{
+      d: 'M 0 0 L 100 100 L 200 0 Z',
+      fill: 'orange',
+      stroke: 'black',
+      strokeWidth: 3
+    }"
+  ></g>
+
+  <g
+    app-my-custom-shape
+    [options]="{
+      d: 'M 0 0 L 200 50 L 100 0 Z',
+      fill: 'blue',
+      stroke: 'black',
+      strokeWidth: 2
+    }"
+  ></g>
+
+  <g
+    app-my-custom-shape
+    [options]="{
+      d: 'M 10 80 C 40 10, 65 10, 95 80 S 150 150, 180 80',
+      fill: 'transparent',
+      stroke: 'green',
+      strokeWidth: 5
+    }"
+  ></g>
+
+  <g
+    app-my-custom-shape
+    [options]="{
+      d: generateWiggle(50, 100),
+      fill: 'black',
+      stroke: 'red',
+      strokeWidth: 5
+    }"
+  ></g>
+  <g
+    app-my-custom-shape
+    [options]="{
+      d: generateBlock(250, 510),
+      fill: 'black',
+      stroke: 'red',
+      strokeWidth: 5
+    }"
+  ></g>
+</svg>

@@ -76,6 +76,13 @@ const routes: Routes = [
     loadChildren: () =>
       import('./modules/lessons/jet/jet.module').then((m) => m.JetModule),
   },
+  {
+    path: 'svg-lesson',
+    loadChildren: () =>
+      import('./modules/lessons/svg-lesson/svg-lesson.module').then(
+        (m) => m.SvgLessonModule
+      ),
+  },
 ];
 
 @NgModule({

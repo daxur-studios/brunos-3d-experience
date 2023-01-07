@@ -1,6 +1,7 @@
 @import url("app/theme/appTheme.css");
-/*@import "../node_modules/@daxur-studios/ui/assets/ui.css";*/
-@import "@daxur-studios/ui/assets/ui.css";
+/*
+@import "@daxur-studios/ui/assets/common.css";
+*/
 body,
 html {
   margin: 0;

@@ -18,17 +18,17 @@ export class SvgToolbarBackgroundComponent implements OnInit {
   constructor(private ref: ChangeDetectorRef) {}
 
   ngOnInit(): void {
-    this.subs.add = this.config.sizes$.subscribe((sizes) => {
-      const items: string[] = [
-        D.M(0, 0),
-        D.L(0, this.config.height),
-        D.L(this.config.width, this.config.height),
-        D.L(this.config.width, 0),
-        D.Z(),
-      ];
-      this.draw = D.joinCoords(items);
-      this.ref.detectChanges();
-    });
+    // this.subs.add = this.config.sizes$.subscribe((sizes) => {
+    //   const items: string[] = [
+    //     D.M(0, 0),
+    //     D.L(0, this.config.height),
+    //     D.L(this.config.width, this.config.height),
+    //     D.L(this.config.width, 0),
+    //     D.Z(),
+    //   ];
+    //   this.draw = D.joinCoords(items);
+    //   this.ref.detectChanges();
+    // });
     //   this.draw = `M 0,0 L 0, ${this.config.height} L ${this.config.width}, ${this.config.height} L 100, 0 Z`;
   }
   ngOnDestroy(): void {

@@ -85,7 +85,7 @@ export class ThreeJsWorld {
 
   //  canvas?: HTMLElement | null;
 
-  reqFrameId: number = 0;
+  // reqFrameId: number = 0;
 
   constructor(
     public sizes: sizes,
@@ -215,9 +215,13 @@ export class ThreeJsWorld {
   ticker = new Ticker();
 
   tick() {
-    this.reqFrameId = window.requestAnimationFrame(() => {
+    this.renderer.setAnimationLoop(() => {
       this.tick();
     });
+
+    // this.reqFrameId = window.requestAnimationFrame(() => {
+    //   this.tick();
+    // });
 
     this.customTick();
 
@@ -243,7 +247,9 @@ export class ThreeJsWorld {
   }
 
   destroy(): void {
-    window.cancelAnimationFrame(this.reqFrameId);
+    //  window.cancelAnimationFrame(this.reqFrameId);
+
+    this.renderer.setAnimationLoop(null);
 
     window.removeEventListener('resize', this.onResize);
 

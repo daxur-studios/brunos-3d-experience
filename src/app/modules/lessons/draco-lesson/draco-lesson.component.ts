@@ -34,6 +34,7 @@ import { BrunoPoints } from './_brunoPoints';
 import { fibonacciSphere } from 'src/app/helpers/3DMath';
 import { TempleGalaxy } from './_galaxy';
 import { randomBetween } from 'src/app/helpers/randomFunctions';
+import { VRButton } from 'three/examples/jsm/webxr/VRButton';
 
 @Component({
   selector: 'app-draco-lesson',
@@ -77,11 +78,15 @@ export class DracoLessonComponent implements OnInit {
 
     const axesHelper = new AxesHelper(50);
     this.e.scene.add(axesHelper);
+
+    document.body.appendChild(VRButton.createButton(this.e.renderer));
+    this.e.renderer.xr.enabled = true;
   }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
     this.e.destroy();
+
     this.gui.destroy();
   }
 

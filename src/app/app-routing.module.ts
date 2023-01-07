@@ -83,6 +83,13 @@ const routes: Routes = [
         (m) => m.SvgLessonModule
       ),
   },
+  {
+    path: 'planets',
+    loadChildren: () =>
+      import('./modules/lessons/planets/planets.module').then(
+        (m) => m.PlanetsModule
+      ),
+  },
 ];
 
 @NgModule({
